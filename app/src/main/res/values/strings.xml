@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SmsApp</string>
+
+    <string name="read_sms_access_required">Read SMS is required to display your SMS.</string>
+    <string name="read_sms_permission_not_available">Permission is not available. Requesting SMS permission.</string>
+    <string name="read_sms_permission_available">Read SMS permission is available. Starting SMS sweep.</string>
+    <string name="read_sms_permission_granted">Read SMS permission was granted. Starting SMS sweep.</string>
+    <string name="read_sms_permission_denied">Read SMS permission request was denied.</string>
+
+    <string name="ok">OK</string>
+    <string name="textView">TextView</string>
+
+</resources>
