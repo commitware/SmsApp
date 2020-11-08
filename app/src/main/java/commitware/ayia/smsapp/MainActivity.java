@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -24,10 +25,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private View mLayout;
 
+    Permissions permissionUtility;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.main_activity);
 
         mLayout = findViewById(R.id.container);
@@ -35,20 +38,33 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         if (savedInstanceState == null) {
             // BEGIN_INCLUDE(startSMSFragment)
             // Check if the read sms permission has been granted
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
-                    == PackageManager.PERMISSION_GRANTED) {
-                // Permission is already available, start sms fragment
+//            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+//                    == PackageManager.PERMISSION_GRANTED) {
+//                // Permission is already available, start sms fragment
+//                Snackbar.make(mLayout,
+//                        R.string.read_sms_permission_available,
+//                        Snackbar.LENGTH_SHORT).show();
+//                startFragment();
+//
+//            } else {
+//                // Permission is missing and must be requested.
+//                requestReadSMSPermission();
+//            }
+
+            // END_INCLUDE(startSMSFragment)
+
+
+            permissionUtility = new Permissions(this, PERMISSIONS);
+            if(permissionUtility.arePermissionsEnabled()){
                 Snackbar.make(mLayout,
                         R.string.read_sms_permission_available,
                         Snackbar.LENGTH_SHORT).show();
                 startFragment();
-
             } else {
-                // Permission is missing and must be requested.
-                requestReadSMSPermission();
+                permissionUtility.requestMultiplePermissions();
             }
 
-            // END_INCLUDE(startSMSFragment)
+
         }
     }
 
@@ -57,23 +73,41 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         // BEGIN_INCLUDE(onRequestPermissionsResult)
-        if (requestCode == PERMISSION_REQUEST_READ_SMS) {
-            // Request for read sms permission.
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission has been granted. Start sweeping preview Activity.
-                Snackbar.make(mLayout, R.string.read_sms_permission_granted,
-                        Snackbar.LENGTH_SHORT)
-                        .show();
 
-                startFragment();
 
-            } else {
-                // Permission request was denied.
-                Snackbar.make(mLayout, R.string.read_sms_permission_denied,
-                        Snackbar.LENGTH_SHORT)
-                        .show();
-            }
+//        if (requestCode == PERMISSION_REQUEST_READ_SMS) {
+//            // Request for read sms permission.
+//            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // Permission has been granted. Start sweeping preview Activity.
+//                Snackbar.make(mLayout, R.string.read_sms_permission_granted,
+//                        Snackbar.LENGTH_SHORT)
+//                        .show();
+//
+//                startFragment();
+//
+//            } else {
+//                // Permission request was denied.
+//                Snackbar.make(mLayout, R.string.read_sms_permission_denied,
+//                        Snackbar.LENGTH_SHORT)
+//                        .show();
+//            }
+//        }
+
+        if(permissionUtility.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            // Permission has been granted. Start sweeping preview Activity.
+            Snackbar.make(mLayout, R.string.read_sms_permission_granted,
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+
+            startFragment();
         }
+        else {
+            // Permission request was denied.
+            Snackbar.make(mLayout, R.string.read_sms_permission_denied,
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
+
     }
 
 
